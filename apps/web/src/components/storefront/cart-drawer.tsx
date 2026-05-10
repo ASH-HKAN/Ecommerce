@@ -11,14 +11,16 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCartStore, selectCartSubtotal } from "@/features/cart/use-cart-store";
 import { formatPrice } from "@/lib/fmt";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/i18n-provider";
 
 export function CartDrawer() {
+  const { t } = useI18n();
   const open = useCartStore((s) => s.open);
   const setOpen = useCartStore((s) => s.setOpen);
   const lines = useCartStore((s) => s.lines);
@@ -33,11 +35,18 @@ export function CartDrawer() {
         className="flex w-full max-w-md flex-col p-0 sm:max-w-lg"
       >
         <SheetHeader className="border-b px-6 py-4">
-          <SheetTitle className="font-display text-lg">Your basket</SheetTitle>
-          <SheetDescription className="text-sm">
+          <SheetTitle className="font-display text-lg" suppressHydrationWarning>
+            {t("cart.title")}
+          </SheetTitle>
+          <SheetDescription className="text-sm" suppressHydrationWarning>
             {lines.length === 0
-              ? "Your basket is empty."
-              : `${lines.length} item${lines.length === 1 ? "" : "s"} ready for checkout.`}
+              ? t("cart.empty.title")
+              : t(
+                  lines.length === 1
+                    ? "account.orders.itemCount"
+                    : "account.orders.itemsCount",
+                  { n: lines.length }
+                )}
           </SheetDescription>
         </SheetHeader>
 
@@ -46,9 +55,14 @@ export function CartDrawer() {
             <div className="mb-5 grid size-16 place-items-center rounded-full bg-muted">
               <ShoppingBag className="size-7 text-muted-foreground" />
             </div>
-            <p className="font-display text-lg">Your basket is empty.</p>
-            <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-              Browse our tools to get started.
+            <p className="font-display text-lg" suppressHydrationWarning>
+              {t("cart.empty.title")}
+            </p>
+            <p
+              className="mt-1 max-w-xs text-sm text-muted-foreground"
+              suppressHydrationWarning
+            >
+              {t("cart.empty.description")}
             </p>
             <Link
               href="/shop"
@@ -57,8 +71,9 @@ export function CartDrawer() {
                 buttonVariants({ variant: "default", size: "lg" }),
                 "mt-6 h-11 px-6"
               )}
+              suppressHydrationWarning
             >
-              Shop tools
+              {t("cart.empty.cta")}
             </Link>
           </div>
         ) : (
@@ -110,7 +125,7 @@ export function CartDrawer() {
                     </div>
                     <button
                       type="button"
-                      aria-label={`Remove ${line.name} from basket`}
+                      aria-label={t("cart.removeItem")}
                       onClick={() => removeItem(line.productId)}
                       className="grid size-8 shrink-0 place-items-center self-start text-muted-foreground hover:text-destructive"
                     >
@@ -124,14 +139,19 @@ export function CartDrawer() {
             <SheetFooter className="border-t bg-card px-6 py-4">
               <div className="flex w-full flex-col gap-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="text-muted-foreground" suppressHydrationWarning>
+                    {t("cart.subtotal")}
+                  </span>
                   <span className="text-base font-semibold tabular-nums">
                     {formatPrice(subtotal)}
                   </span>
                 </div>
                 <Separator />
-                <p className="text-xs text-muted-foreground">
-                  Taxes and shipping calculated at checkout.
+                <p
+                  className="text-xs text-muted-foreground"
+                  suppressHydrationWarning
+                >
+                  {t("reservation.taxNote")}
                 </p>
                 <Link
                   href="/checkout"
@@ -140,8 +160,9 @@ export function CartDrawer() {
                     buttonVariants({ variant: "default", size: "lg" }),
                     "h-11 w-full justify-center text-sm"
                   )}
+                  suppressHydrationWarning
                 >
-                  Proceed to checkout
+                  {t("cart.checkout")}
                 </Link>
                 <Link
                   href="/cart"
@@ -150,8 +171,9 @@ export function CartDrawer() {
                     buttonVariants({ variant: "ghost", size: "lg" }),
                     "h-10 w-full justify-center text-sm"
                   )}
+                  suppressHydrationWarning
                 >
-                  View basket
+                  {t("cart.title")}
                 </Link>
               </div>
             </SheetFooter>

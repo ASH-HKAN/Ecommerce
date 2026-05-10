@@ -1,3 +1,5 @@
+"use client";
+
 import {
   CheckCircle2,
   AlertTriangle,
@@ -14,6 +16,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { StockState } from "@/data/types";
+import { useI18n } from "@/i18n/i18n-provider";
+import type { TKey } from "@/i18n/dictionaries/en";
 
 type Tone = "success" | "warning" | "danger" | "info" | "neutral" | "brand";
 
@@ -45,6 +49,7 @@ function StatusBadge({
         TONE_CLASSES[tone],
         className
       )}
+      suppressHydrationWarning
     >
       <Icon className="size-3" />
       {label}
@@ -61,12 +66,13 @@ export function InventoryStatusBadge({
   reservable?: boolean;
   className?: string;
 }) {
+  const { t } = useI18n();
   if (state === "in_stock")
     return (
       <StatusBadge
         tone="success"
         Icon={CheckCircle2}
-        label="In stock"
+        label={t("status.inventory.in_stock")}
         className={className}
       />
     );
@@ -75,7 +81,7 @@ export function InventoryStatusBadge({
       <StatusBadge
         tone="warning"
         Icon={AlertTriangle}
-        label="Low stock"
+        label={t("status.inventory.low_stock")}
         className={className}
       />
     );
@@ -84,16 +90,15 @@ export function InventoryStatusBadge({
       <StatusBadge
         tone="danger"
         Icon={Ban}
-        label="Out of stock"
+        label={t("status.inventory.out_of_stock")}
         className={className}
       />
     );
-  // reservable-only state
   return (
     <StatusBadge
       tone="info"
       Icon={Clock}
-      label={reservable ? "Reservable" : "Out of stock"}
+      label={t(reservable ? "status.inventory.reservable" : "status.inventory.out_of_stock")}
       className={className}
     />
   );
@@ -115,21 +120,22 @@ export function OrderStatusBadge({
   status: OrderStatus;
   className?: string;
 }) {
+  const { t } = useI18n();
   const map: Record<
     OrderStatus,
-    { tone: Tone; Icon: React.ComponentType<{ className?: string }>; label: string }
+    { tone: Tone; Icon: React.ComponentType<{ className?: string }>; key: TKey }
   > = {
-    pending_payment: { tone: "warning", Icon: Hourglass, label: "Pending payment" },
-    paid:            { tone: "success", Icon: CreditCard, label: "Paid" },
-    processing:      { tone: "info",    Icon: PackageIcon, label: "Processing" },
-    shipped:         { tone: "info",    Icon: Truck, label: "Shipped" },
-    delivered:       { tone: "success", Icon: PackageCheck, label: "Delivered" },
-    cancelled:       { tone: "neutral", Icon: Ban, label: "Cancelled" },
-    refunded:        { tone: "neutral", Icon: Undo2, label: "Refunded" },
+    pending_payment: { tone: "warning", Icon: Hourglass,    key: "status.order.pending_payment" },
+    paid:            { tone: "success", Icon: CreditCard,   key: "status.order.paid" },
+    processing:      { tone: "info",    Icon: PackageIcon,  key: "status.order.processing" },
+    shipped:         { tone: "info",    Icon: Truck,        key: "status.order.shipped" },
+    delivered:       { tone: "success", Icon: PackageCheck, key: "status.order.delivered" },
+    cancelled:       { tone: "neutral", Icon: Ban,          key: "status.order.cancelled" },
+    refunded:        { tone: "neutral", Icon: Undo2,        key: "status.order.refunded" },
   };
-  const { tone, Icon, label } = map[status];
+  const { tone, Icon, key } = map[status];
   return (
-    <StatusBadge tone={tone} Icon={Icon} label={label} className={className} />
+    <StatusBadge tone={tone} Icon={Icon} label={t(key)} className={className} />
   );
 }
 
@@ -148,19 +154,20 @@ export function ReservationStatusBadge({
   status: ReservationStatus;
   className?: string;
 }) {
+  const { t } = useI18n();
   const map: Record<
     ReservationStatus,
-    { tone: Tone; Icon: React.ComponentType<{ className?: string }>; label: string }
+    { tone: Tone; Icon: React.ComponentType<{ className?: string }>; key: TKey }
   > = {
-    pending:       { tone: "neutral", Icon: Clock, label: "Locking stock" },
-    active:        { tone: "success", Icon: Bookmark, label: "Reserved" },
-    expiring_soon: { tone: "warning", Icon: AlertTriangle, label: "Expiring soon" },
-    expired:       { tone: "danger",  Icon: AlertCircle, label: "Expired" },
-    cancelled:     { tone: "neutral", Icon: Ban, label: "Cancelled" },
-    converted:     { tone: "success", Icon: CheckCircle2, label: "Paid" },
+    pending:       { tone: "neutral", Icon: Clock,         key: "status.reservation.pending" },
+    active:        { tone: "success", Icon: Bookmark,      key: "status.reservation.active" },
+    expiring_soon: { tone: "warning", Icon: AlertTriangle, key: "status.reservation.expiring_soon" },
+    expired:       { tone: "danger",  Icon: AlertCircle,   key: "status.reservation.expired" },
+    cancelled:     { tone: "neutral", Icon: Ban,           key: "status.reservation.cancelled" },
+    converted:     { tone: "success", Icon: CheckCircle2,  key: "status.reservation.converted" },
   };
-  const { tone, Icon, label } = map[status];
+  const { tone, Icon, key } = map[status];
   return (
-    <StatusBadge tone={tone} Icon={Icon} label={label} className={className} />
+    <StatusBadge tone={tone} Icon={Icon} label={t(key)} className={className} />
   );
 }

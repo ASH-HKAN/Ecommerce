@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/i18n-provider";
 
 type Props = {
   variant?: "navbar" | "hero" | "mobile";
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function SearchBar({ variant = "navbar", className }: Props) {
+  const { t } = useI18n();
   const sizeClasses =
     variant === "navbar"
       ? "h-10 text-sm"
@@ -32,7 +34,8 @@ export function SearchBar({ variant = "navbar", className }: Props) {
         type="search"
         name="q"
         autoComplete="off"
-        placeholder="Search tools, brands, SKUs…"
+        placeholder={t("nav.searchPlaceholder")}
+        suppressHydrationWarning
         className="h-full w-full bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
       />
       <kbd className="hidden items-center gap-1 rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground sm:inline-flex">

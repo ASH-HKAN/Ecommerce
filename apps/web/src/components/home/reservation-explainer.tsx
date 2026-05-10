@@ -1,30 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight, Bookmark, Clock, Truck } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/i18n-provider";
+import type { TKey } from "@/i18n/dictionaries/en";
 
-const steps = [
-  {
-    n: "01",
-    icon: Bookmark,
-    title: "Reserve",
-    body: "Pick a reservable tool and lock the stock instantly.",
-  },
-  {
-    n: "02",
-    icon: Clock,
-    title: "Pay before the timer ends",
-    body: "Stock is held for 24 hours. A clear timer counts down for you.",
-  },
-  {
-    n: "03",
-    icon: Truck,
-    title: "Pickup or ship",
-    body: "Choose pickup at the warehouse or fast home delivery.",
-  },
+const steps: {
+  n: string;
+  icon: React.ComponentType<{ className?: string }>;
+  titleKey: TKey;
+  bodyKey: TKey;
+}[] = [
+  { n: "01", icon: Bookmark, titleKey: "home.reservation.step1.title", bodyKey: "home.reservation.step1.body" },
+  { n: "02", icon: Clock,    titleKey: "home.reservation.step2.title", bodyKey: "home.reservation.step2.body" },
+  { n: "03", icon: Truck,    titleKey: "home.reservation.step3.title", bodyKey: "home.reservation.step3.body" },
 ];
 
 export function ReservationExplainer() {
+  const { t } = useI18n();
   return (
     <section
       id="reservation"
@@ -35,15 +30,23 @@ export function ReservationExplainer() {
       <div className="container relative">
         <div className="grid items-end gap-8 md:grid-cols-2">
           <div>
-            <p className="text-eyebrow uppercase text-muted-foreground">
-              How reservation works
+            <p
+              className="text-eyebrow uppercase text-muted-foreground"
+              suppressHydrationWarning
+            >
+              {t("home.reservation.eyebrow")}
             </p>
-            <h2 className="mt-2 font-display text-display-sm md:text-display-md">
-              Lock the tool. Pay when you're ready.
+            <h2
+              className="mt-2 font-display text-display-sm md:text-display-md"
+              suppressHydrationWarning
+            >
+              {t("home.reservation.title")}
             </h2>
-            <p className="mt-3 max-w-md text-sm text-muted-foreground md:text-base">
-              For tools that move fast, we'll hold stock for you while you
-              confirm with the team. No commitments, no fees.
+            <p
+              className="mt-3 max-w-md text-sm text-muted-foreground md:text-base"
+              suppressHydrationWarning
+            >
+              {t("reservation.howItWorks.note")}
             </p>
           </div>
           <div className="md:justify-self-end">
@@ -53,8 +56,9 @@ export function ReservationExplainer() {
                 buttonVariants({ variant: "outline", size: "lg" }),
                 "h-11 gap-2 px-5"
               )}
+              suppressHydrationWarning
             >
-              View reservable tools
+              {t("account.reservations.viewReservable")}
               <ArrowRight className="size-4" />
             </Link>
           </div>
@@ -72,10 +76,18 @@ export function ReservationExplainer() {
               <span className="grid size-10 place-items-center rounded-md bg-brand-orange-500/10 text-brand-orange-500">
                 <s.icon className="size-5" />
               </span>
-              <h3 className="mt-4 font-display text-base font-semibold">
-                {s.title}
+              <h3
+                className="mt-4 font-display text-base font-semibold"
+                suppressHydrationWarning
+              >
+                {t(s.titleKey)}
               </h3>
-              <p className="mt-1 text-sm text-muted-foreground">{s.body}</p>
+              <p
+                className="mt-1 text-sm text-muted-foreground"
+                suppressHydrationWarning
+              >
+                {t(s.bodyKey)}
+              </p>
             </li>
           ))}
         </ol>

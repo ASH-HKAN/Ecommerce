@@ -9,8 +9,11 @@ import { SearchBar } from "./search-bar";
 import { MobileNav } from "./mobile-nav";
 import { ThemeToggle } from "./theme-toggle";
 import { CartTrigger } from "./cart-trigger";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { useI18n } from "@/i18n/i18n-provider";
 
 export function Navbar() {
+  const { t } = useI18n();
   const [scrolled, setScrolled] = React.useState(false);
 
   React.useEffect(() => {
@@ -39,7 +42,7 @@ export function Navbar() {
         <Link
           href="/"
           className="flex items-center gap-2"
-          aria-label="Auto Tools — home"
+          aria-label={t("nav.home")}
         >
           <span className="grid size-8 place-items-center rounded-md bg-foreground text-background">
             <Wrench className="size-4" />
@@ -55,19 +58,19 @@ export function Navbar() {
             href="/shop"
             className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground"
           >
-            All tools
+            <span suppressHydrationWarning>{t("nav.allTools")}</span>
           </Link>
           <Link
             href="/shop?deal=1"
             className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground"
           >
-            Deals
+            <span suppressHydrationWarning>{t("nav.deals")}</span>
           </Link>
           <Link
             href="/shop?reservable=1"
             className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-muted hover:text-foreground"
           >
-            Reservable
+            <span suppressHydrationWarning>{t("product.reserve")}</span>
           </Link>
         </div>
 
@@ -77,18 +80,19 @@ export function Navbar() {
           </div>
           <Link
             href="/account/wishlist"
-            aria-label="Wishlist"
+            aria-label={t("account.nav.wishlist")}
             className="hidden size-9 place-items-center rounded-md text-foreground/70 hover:bg-muted hover:text-foreground sm:grid"
           >
             <Heart className="size-5" />
           </Link>
           <Link
             href="/account"
-            aria-label="My account"
+            aria-label={t("nav.account")}
             className="grid size-9 place-items-center rounded-md text-foreground/70 hover:bg-muted hover:text-foreground"
           >
             <User className="size-5" />
           </Link>
+          <LanguageSwitcher />
           <ThemeToggle />
           <CartTrigger />
         </div>

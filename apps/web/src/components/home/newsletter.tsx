@@ -7,6 +7,7 @@ import { z } from "zod";
 import { ArrowRight, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/i18n-provider";
 
 const Schema = z.object({
   email: z.email("Enter a valid email address."),
@@ -14,6 +15,7 @@ const Schema = z.object({
 type FormValues = z.infer<typeof Schema>;
 
 export function Newsletter() {
+  const { t } = useI18n();
   const {
     register,
     handleSubmit,
@@ -24,8 +26,8 @@ export function Newsletter() {
   function onSubmit(values: FormValues) {
     return new Promise<void>((resolve) => {
       setTimeout(() => {
-        toast.success("You're on the list.", {
-          description: `We'll send updates to ${values.email}.`,
+        toast.success(t("home.newsletter.success"), {
+          description: values.email,
         });
         reset();
         resolve();
@@ -38,14 +40,23 @@ export function Newsletter() {
       <div className="container">
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <div>
-            <p className="text-eyebrow uppercase text-white/60">
-              Stay in the loop
+            <p
+              className="text-eyebrow uppercase text-white/60"
+              suppressHydrationWarning
+            >
+              {t("home.newsletter.eyebrow")}
             </p>
-            <h2 className="mt-2 font-display text-display-sm md:text-display-md">
-              New arrivals, restocks, and deals — without the spam.
+            <h2
+              className="mt-2 font-display text-display-sm md:text-display-md"
+              suppressHydrationWarning
+            >
+              {t("home.newsletter.title")}
             </h2>
-            <p className="mt-3 max-w-md text-sm text-white/70">
-              One email a week, sent on Tuesdays. Unsubscribe anytime.
+            <p
+              className="mt-3 max-w-md text-sm text-white/70"
+              suppressHydrationWarning
+            >
+              {t("home.newsletter.subtitle")}
             </p>
           </div>
           <form
@@ -61,9 +72,10 @@ export function Newsletter() {
                 type="email"
                 inputMode="email"
                 autoComplete="email"
-                placeholder="you@yourshop.com"
+                placeholder={t("home.newsletter.placeholder")}
                 aria-invalid={!!errors.email}
                 {...register("email")}
+                suppressHydrationWarning
                 className="h-11 flex-1 bg-transparent text-sm text-white placeholder:text-white/50 focus:outline-none"
               />
               <button
@@ -72,8 +84,11 @@ export function Newsletter() {
                 className={cn(
                   "inline-flex h-11 items-center gap-2 rounded-md bg-brand-orange-500 px-4 text-sm font-medium text-primary-foreground transition-all hover:bg-brand-orange-600 disabled:opacity-60"
                 )}
+                suppressHydrationWarning
               >
-                {isSubmitting ? "Sending…" : "Subscribe"}
+                {isSubmitting
+                  ? t("home.newsletter.sending")
+                  : t("home.newsletter.subscribe")}
                 <ArrowRight className="size-4" />
               </button>
             </div>
@@ -82,9 +97,11 @@ export function Newsletter() {
                 {errors.email.message}
               </p>
             )}
-            <p className="max-w-md text-xs text-white/50">
-              By subscribing you agree to our privacy policy. We never sell
-              your address and you can opt out at any time.
+            <p
+              className="max-w-md text-xs text-white/50"
+              suppressHydrationWarning
+            >
+              {t("home.newsletter.legal")}
             </p>
           </form>
         </div>

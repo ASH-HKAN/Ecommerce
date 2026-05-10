@@ -9,12 +9,8 @@ import { PriceBlock } from "@/components/product/price-block";
 import { formatCountdown } from "@/lib/fmt";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/i18n-provider";
 
-/**
- * Tracks a countdown that only starts once the client has mounted.
- * Returns null until then, so SSR and the first client render produce the
- * same HTML and we avoid hydration mismatches.
- */
 function useClientCountdown(durationMs: number) {
   const [endsAt, setEndsAt] = React.useState<number | null>(null);
   const [now, setNow] = React.useState<number | null>(null);
@@ -46,7 +42,10 @@ function CountdownCell({
       >
         {value === null ? "—" : String(value).padStart(2, "0")}
       </span>
-      <span className="mt-1 text-[10px] uppercase tracking-wider text-white/60">
+      <span
+        className="mt-1 text-[10px] uppercase tracking-wider text-white/60"
+        suppressHydrationWarning
+      >
         {label}
       </span>
     </div>
@@ -54,14 +53,15 @@ function CountdownCell({
 }
 
 export function DealOfTheWeek() {
+  const { t } = useI18n();
   const product = DEAL_OF_THE_WEEK_PRODUCT;
   const cd = useClientCountdown(DEAL_DURATION_MS);
 
   const cells = [
-    { v: cd?.days ?? null, l: "Days" },
-    { v: cd?.hours ?? null, l: "Hours" },
-    { v: cd?.minutes ?? null, l: "Min" },
-    { v: cd?.seconds ?? null, l: "Sec" },
+    { v: cd?.days ?? null,    l: t("home.deal.days") },
+    { v: cd?.hours ?? null,   l: t("home.deal.hours") },
+    { v: cd?.minutes ?? null, l: t("home.deal.minutes") },
+    { v: cd?.seconds ?? null, l: t("home.deal.seconds") },
   ];
 
   return (
@@ -69,18 +69,22 @@ export function DealOfTheWeek() {
       <div className="container">
         <div className="overflow-hidden rounded-2xl bg-brand-steel-950 text-white shadow-elev-4">
           <div className="grid items-center gap-10 p-8 lg:grid-cols-2 lg:p-12">
-            {/* Left: copy */}
             <div className="space-y-5">
-              <span className="inline-flex items-center gap-2 rounded-full border border-brand-orange-500/30 bg-brand-orange-500/10 px-3 py-1 text-xs font-medium text-brand-orange-500">
+              <span
+                className="inline-flex items-center gap-2 rounded-full border border-brand-orange-500/30 bg-brand-orange-500/10 px-3 py-1 text-xs font-medium text-brand-orange-500"
+                suppressHydrationWarning
+              >
                 <Flame className="size-3.5" />
-                Limited · Deal of the week
+                {t("home.deal.badge")}
               </span>
               <h2 className="font-display text-display-sm text-balance md:text-display-md">
                 {product.name}
               </h2>
-              <p className="max-w-md text-pretty text-sm text-white/70 md:text-base">
-                {product.shortSpec}. Save while supplies last — this deal
-                resets every Monday at 09:00.
+              <p
+                className="max-w-md text-pretty text-sm text-white/70 md:text-base"
+                suppressHydrationWarning
+              >
+                {t("home.deal.body")}
               </p>
               <div className="flex items-center gap-2">
                 {cells.map((c) => (
@@ -100,20 +104,25 @@ export function DealOfTheWeek() {
                     buttonVariants({ variant: "default", size: "lg" }),
                     "h-12 gap-2 px-6 text-sm"
                   )}
+                  suppressHydrationWarning
                 >
-                  Shop the deal
+                  {t("home.deal.shop")}
                   <ArrowRight className="size-4" />
                 </Link>
               </div>
             </div>
 
-            {/* Right: art */}
             <div className="relative">
               <div className="relative aspect-square overflow-hidden rounded-xl border border-white/10 bg-white/[0.04]">
                 <ProductIconArt iconKey={product.iconKey} />
               </div>
               <div className="absolute -bottom-3 -right-3 hidden rounded-xl border border-white/10 bg-brand-steel-900/80 px-4 py-3 text-sm shadow-elev-4 backdrop-blur sm:block">
-                <p className="text-eyebrow uppercase text-white/60">Save</p>
+                <p
+                  className="text-eyebrow uppercase text-white/60"
+                  suppressHydrationWarning
+                >
+                  {t("home.deal.save")}
+                </p>
                 <p className="font-display text-xl font-bold text-brand-orange-500">
                   {Math.round(
                     (((product.compareAt ?? product.price) - product.price) /

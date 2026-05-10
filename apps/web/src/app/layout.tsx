@@ -3,6 +3,7 @@ import { Inter, Inter_Tight, JetBrains_Mono } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Providers } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
+import { I18nNoFlashScript } from "@/i18n/i18n-provider";
 import "./globals.css";
 
 const inter = Inter({
@@ -49,9 +50,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      dir="ltr"
       suppressHydrationWarning
       className={cn(inter.variable, interTight.variable, jetbrainsMono.variable)}
     >
+      <head>
+        <I18nNoFlashScript />
+      </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <Providers>
           {children}

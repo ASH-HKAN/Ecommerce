@@ -6,8 +6,10 @@ import { toast } from "sonner";
 import type { Product } from "@/data/types";
 import { useCartStore } from "@/features/cart/use-cart-store";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/i18n/i18n-provider";
 
 export function ProductDetailActions({ product }: { product: Product }) {
+  const { t } = useI18n();
   const addItem = useCartStore((s) => s.addItem);
   const max = product.stockCount ?? 99;
   const [qty, setQty] = React.useState(1);
@@ -23,28 +25,29 @@ export function ProductDetailActions({ product }: { product: Product }) {
 
   function handleAdd() {
     if (!isAvailable) {
-      toast.error("Currently out of stock.");
+      toast.error(t("product.outOfStock"));
       return;
     }
     addItem(product, qty);
-    toast.success(`Added ${qty} × ${product.name} to basket.`);
+    toast.success(`${qty} × ${product.name} → ${t("product.addToBasket")}`);
   }
 
   function handleReserve() {
     if (!product.reservable) {
-      toast.error("This tool can't be reserved.");
+      toast.error(t("product.outOfStock"));
       return;
     }
-    toast.info(`Reserve ${qty} × ${product.name}?`, {
-      description:
-        "We'll hold these tools for you for 24 hours. Pay before the timer ends to keep this reservation.",
+    toast.info(`${t("product.reserve")} ${qty} × ${product.name}?`, {
+      description: t("reservation.howItWorks.step2"),
     });
   }
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-3">
-        <span className="text-sm text-muted-foreground">Quantity</span>
+        <span className="text-sm text-muted-foreground" suppressHydrationWarning>
+          {t("product.qty")}
+        </span>
         <div className="inline-flex items-center rounded-md border">
           <button
             type="button"
@@ -70,7 +73,7 @@ export function ProductDetailActions({ product }: { product: Product }) {
         </div>
         {product.stockCount !== undefined && product.stockCount > 0 && (
           <span className="text-xs text-muted-foreground">
-            Up to {product.stockCount}
+            {product.stockCount}
           </span>
         )}
       </div>
@@ -85,21 +88,24 @@ export function ProductDetailActions({ product }: { product: Product }) {
           )}
         >
           <ShoppingBag className="size-4" />
-          {isAvailable ? "Add to basket" : "Out of stock"}
+          <span suppressHydrationWarning>
+            {isAvailable ? t("product.addToBasket") : t("product.outOfStock")}
+          </span>
         </button>
         <button
           type="button"
           onClick={handleReserve}
           disabled={!product.reservable}
           className="inline-flex h-12 items-center justify-center gap-2 rounded-md border bg-background px-5 text-sm font-medium hover:bg-muted disabled:pointer-events-none disabled:opacity-50"
+          suppressHydrationWarning
         >
           <Bookmark className="size-4" />
-          Reserve
+          {t("product.reserve")}
         </button>
         <button
           type="button"
-          aria-label="Add to wishlist"
-          onClick={() => toast.success("Saved to wishlist.")}
+          aria-label={t("product.wishlist")}
+          onClick={() => toast.success(t("product.wishlist"))}
           className="grid size-12 place-items-center rounded-md border bg-background text-muted-foreground hover:text-destructive sm:size-12"
         >
           <Heart className="size-4" />

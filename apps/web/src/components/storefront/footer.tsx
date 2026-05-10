@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Wrench, Globe, AtSign, Share2, Mail } from "lucide-react";
 import { categories, brands } from "@/data/mocks";
@@ -7,6 +9,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { LanguageSwitcher } from "@/components/i18n/language-switcher";
+import { useI18n } from "@/i18n/i18n-provider";
 
 const supportLinks = [
   { href: "/contact", label: "Contact" },
@@ -30,13 +34,16 @@ const legalLinks = [
 ];
 
 const social = [
-  { Icon: Globe, label: "Website" },
+  { Icon: Globe,  label: "Website" },
   { Icon: AtSign, label: "Newsletter" },
   { Icon: Share2, label: "Share" },
-  { Icon: Mail, label: "Email" },
+  { Icon: Mail,   label: "Email" },
 ];
 
 export function Footer() {
+  const { t, locale } = useI18n();
+  const year = new Date().getFullYear();
+
   return (
     <footer className="border-t bg-card">
       <div className="container py-12 lg:py-16">
@@ -50,10 +57,11 @@ export function Footer() {
                 AUTO<span className="text-primary">TOOLS</span>
               </span>
             </Link>
-            <p className="max-w-sm text-sm text-muted-foreground">
-              Diagnostic, hand, power, and garage equipment from brands
-              mechanics already trust. Genuine stock. Secure payment. Real
-              warranty.
+            <p
+              className="max-w-sm text-sm text-muted-foreground"
+              suppressHydrationWarning
+            >
+              {t("footer.newsletter.description")}
             </p>
             <div className="flex items-center gap-2 pt-2">
               {social.map(({ Icon, label }) => (
@@ -66,27 +74,28 @@ export function Footer() {
                   <Icon className="size-4" />
                 </a>
               ))}
+              <div className="ml-1">
+                <LanguageSwitcher variant="compact" />
+              </div>
             </div>
           </div>
 
           <div className="hidden gap-8 md:grid md:grid-cols-3 lg:col-span-8">
-            <FooterColumn title="Shop">
+            <FooterColumn title={t("footer.shop")}>
               {categories.map((c) => (
                 <li key={c.id}>
-                  <FooterLink href={`/categories/${c.slug}`}>
-                    {c.name}
-                  </FooterLink>
+                  <FooterLink href={`/categories/${c.slug}`}>{c.name}</FooterLink>
                 </li>
               ))}
             </FooterColumn>
-            <FooterColumn title="Support">
+            <FooterColumn title={t("footer.support")}>
               {supportLinks.map((l) => (
                 <li key={l.href}>
                   <FooterLink href={l.href}>{l.label}</FooterLink>
                 </li>
               ))}
             </FooterColumn>
-            <FooterColumn title="Company">
+            <FooterColumn title={t("footer.company")}>
               {aboutLinks.map((l) => (
                 <li key={l.href}>
                   <FooterLink href={l.href}>{l.label}</FooterLink>
@@ -98,21 +107,19 @@ export function Footer() {
           <div className="md:hidden">
             <Accordion multiple className="w-full">
               <AccordionItem value="shop">
-                <AccordionTrigger>Shop</AccordionTrigger>
+                <AccordionTrigger>{t("footer.shop")}</AccordionTrigger>
                 <AccordionContent>
                   <ul className="space-y-2">
                     {categories.map((c) => (
                       <li key={c.id}>
-                        <FooterLink href={`/categories/${c.slug}`}>
-                          {c.name}
-                        </FooterLink>
+                        <FooterLink href={`/categories/${c.slug}`}>{c.name}</FooterLink>
                       </li>
                     ))}
                   </ul>
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="support">
-                <AccordionTrigger>Support</AccordionTrigger>
+                <AccordionTrigger>{t("footer.support")}</AccordionTrigger>
                 <AccordionContent>
                   <ul className="space-y-2">
                     {supportLinks.map((l) => (
@@ -124,7 +131,7 @@ export function Footer() {
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="company">
-                <AccordionTrigger>Company</AccordionTrigger>
+                <AccordionTrigger>{t("footer.company")}</AccordionTrigger>
                 <AccordionContent>
                   <ul className="space-y-2">
                     {aboutLinks.map((l) => (
@@ -140,8 +147,11 @@ export function Footer() {
         </div>
 
         <div className="mt-12 border-t pt-8">
-          <p className="mb-4 text-eyebrow uppercase text-muted-foreground">
-            Brands we stock
+          <p
+            className="mb-4 text-eyebrow uppercase text-muted-foreground"
+            suppressHydrationWarning
+          >
+            {t("nav.brands")}
           </p>
           <ul className="flex flex-wrap gap-x-6 gap-y-3">
             {brands.map((b) => (
@@ -156,7 +166,9 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t pt-6 text-xs text-muted-foreground md:flex-row md:items-center">
-          <p>© {new Date().getFullYear()} Auto Tools. All rights reserved.</p>
+          <p suppressHydrationWarning>
+            {t("footer.copyright", { year })}
+          </p>
           <ul className="flex flex-wrap items-center gap-4">
             {legalLinks.map((l) => (
               <li key={l.href}>
@@ -165,7 +177,7 @@ export function Footer() {
                 </Link>
               </li>
             ))}
-            <li className="flex items-center gap-2">
+            <li className="flex items-center gap-2" lang="en" dir="ltr" key={locale}>
               <span className="rounded border bg-muted px-2 py-0.5 font-mono text-[10px] tracking-wider">VISA</span>
               <span className="rounded border bg-muted px-2 py-0.5 font-mono text-[10px] tracking-wider">MC</span>
               <span className="rounded border bg-muted px-2 py-0.5 font-mono text-[10px] tracking-wider">AMEX</span>
@@ -187,7 +199,12 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <p className="mb-4 text-eyebrow uppercase text-muted-foreground">{title}</p>
+      <p
+        className="mb-4 text-eyebrow uppercase text-muted-foreground"
+        suppressHydrationWarning
+      >
+        {title}
+      </p>
       <ul className="space-y-2">{children}</ul>
     </div>
   );

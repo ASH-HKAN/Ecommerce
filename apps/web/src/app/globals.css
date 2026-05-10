@@ -143,3 +143,52 @@
     }
   }
 }
+
+/* ============================================================
+ * RTL fixes
+ *
+ * The codebase uses physical Tailwind utilities (left/right, ml/mr,
+ * pl/pr) which do not auto-flip. Here we cover the most-visible
+ * patterns globally so the app reads correctly in Farsi and Arabic.
+ * Component-level utilities can still override with `rtl:` modifiers.
+ * ============================================================ */
+
+[dir="rtl"] {
+  /* Mirror chevron-right / chevron-left icons used as directional cues. */
+  .lucide-chevron-right,
+  .lucide-arrow-right,
+  .lucide-arrow-left {
+    transform: scaleX(-1);
+  }
+}
+
+/*
+ * Search inputs commonly use `pl-10 pr-3` with the icon at `left-3`.
+ * In RTL we flip that so the icon sits at the start and the padding
+ * is on the start side. We tag this via a `.dir-aware-search` helper
+ * applied selectively, but to keep migration cheap we also apply it
+ * heuristically to inputs of type=search inside common containers.
+ */
+[dir="rtl"] input[type="search"] {
+  padding-left: 0.75rem !important;   /* 12px = pr-3 visual */
+  padding-right: 2.5rem !important;   /* 40px = pl-10 visual */
+}
+
+/* Flip absolutely-positioned icons used as input adornments. The Search
+   icon in the navbar/admin uses `left-3` — flip it to `right-3` in RTL. */
+[dir="rtl"] form .lucide-search,
+[dir="rtl"] .relative > .lucide-search {
+  left: auto !important;
+  right: 0.75rem !important;
+}
+
+/* Active-rail marker in admin sidebar uses `left-0` — flip in RTL. */
+[dir="rtl"] [data-rtl-flip-rail] {
+  left: auto !important;
+  right: 0 !important;
+}
+
+/* Cart drawer sheet: Tailwind/Radix sheet on `side=right` flips automatically
+ * because Radix uses logical positioning when `dir="rtl"` is set on the
+ * scope. We rely on Radix Sheet primitives doing the right thing.
+ */

@@ -1,30 +1,41 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight, Activity, Wrench, Drill, Cog, Package, Plug } from "lucide-react";
 import { categories } from "@/data/mocks";
 import type { LucideIcon } from "lucide-react";
+import { useI18n } from "@/i18n/i18n-provider";
 
 const ICONS: Record<string, LucideIcon> = {
   Activity, Wrench, Drill, Cog, Package, Plug,
 };
 
 export function CategoryGrid() {
+  const { t } = useI18n();
   return (
     <section className="border-b py-16 lg:py-24">
       <div className="container">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-eyebrow uppercase text-muted-foreground">
-              Browse by category
+            <p
+              className="text-eyebrow uppercase text-muted-foreground"
+              suppressHydrationWarning
+            >
+              {t("home.categories.eyebrow")}
             </p>
-            <h2 className="mt-2 font-display text-display-sm md:text-display-md">
-              Everything for the bay.
+            <h2
+              className="mt-2 font-display text-display-sm md:text-display-md"
+              suppressHydrationWarning
+            >
+              {t("home.categories.title")}
             </h2>
           </div>
           <Link
             href="/shop"
             className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+            suppressHydrationWarning
           >
-            View all categories
+            {t("common.viewAll")}
             <ArrowUpRight className="size-4" />
           </Link>
         </div>

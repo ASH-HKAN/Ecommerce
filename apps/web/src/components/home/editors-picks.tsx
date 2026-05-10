@@ -1,33 +1,36 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowUpRight, Star } from "lucide-react";
 import { editorsPicks } from "@/data/mocks";
 import { ProductIconArt } from "@/components/product/product-icon";
 import { PriceBlock } from "@/components/product/price-block";
 import { InventoryStatusBadge } from "@/components/product/status-badges";
+import { useI18n } from "@/i18n/i18n-provider";
+import type { TKey } from "@/i18n/dictionaries/en";
 
-const editorial = [
-  {
-    eyebrow: "Editor's pick",
-    title: "The diagnostic kit we recommend first.",
-    body: "Live data, bi-directional control, and a Bluetooth dongle that just works on iOS and Android. A solid starting point for any general-service shop.",
-  },
-  {
-    eyebrow: "Editor's pick",
-    title: "The multimeter that pays for itself.",
-    body: "True-RMS, 1000 V CAT IV. Built to outlive everything else on the bench, including arguments about who borrowed it last.",
-  },
+const editorial: { titleKey: TKey; bodyKey: TKey }[] = [
+  { titleKey: "home.editors.tagline.2", bodyKey: "home.editors.body.2" },
+  { titleKey: "home.editors.tagline.1", bodyKey: "home.editors.body.1" },
 ];
 
 export function EditorsPicks() {
+  const { t } = useI18n();
   return (
     <section className="border-b py-16 lg:py-24">
       <div className="container">
         <div className="mb-10 max-w-2xl">
-          <p className="text-eyebrow uppercase text-muted-foreground">
-            Editor's picks
+          <p
+            className="text-eyebrow uppercase text-muted-foreground"
+            suppressHydrationWarning
+          >
+            {t("home.editors.eyebrow")}
           </p>
-          <h2 className="mt-2 font-display text-display-sm md:text-display-md">
-            Tools we'd pull off the truck first.
+          <h2
+            className="mt-2 font-display text-display-sm md:text-display-md"
+            suppressHydrationWarning
+          >
+            {t("home.editors.title")}
           </h2>
         </div>
 
@@ -46,16 +49,25 @@ export function EditorsPicks() {
               </div>
               <div className="flex flex-1 flex-col gap-3">
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="rounded-md bg-foreground px-2 py-0.5 text-background">
-                    {editorial[i]?.eyebrow ?? "Editor's pick"}
+                  <span
+                    className="rounded-md bg-foreground px-2 py-0.5 text-background"
+                    suppressHydrationWarning
+                  >
+                    {t("home.editors.badge")}
                   </span>
                   <span className="text-muted-foreground">{p.brand.name}</span>
                 </div>
-                <h3 className="font-display text-xl font-semibold leading-snug">
-                  {editorial[i]?.title ?? p.name}
+                <h3
+                  className="font-display text-xl font-semibold leading-snug"
+                  suppressHydrationWarning
+                >
+                  {editorial[i] ? t(editorial[i].titleKey) : p.name}
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                  {editorial[i]?.body ?? p.shortSpec}
+                <p
+                  className="text-sm text-muted-foreground"
+                  suppressHydrationWarning
+                >
+                  {editorial[i] ? t(editorial[i].bodyKey) : p.shortSpec}
                 </p>
                 <div className="flex items-center gap-1.5 text-sm">
                   <Star className="size-3.5 fill-warning text-warning" />
@@ -77,8 +89,11 @@ export function EditorsPicks() {
                     compareAt={p.compareAt}
                     size="lg"
                   />
-                  <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
-                    See product
+                  <span
+                    className="inline-flex items-center gap-1 text-sm font-medium text-primary"
+                    suppressHydrationWarning
+                  >
+                    {t("home.editors.see")}
                     <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
                 </div>

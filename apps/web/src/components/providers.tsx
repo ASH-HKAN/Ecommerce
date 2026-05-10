@@ -7,6 +7,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { I18nProvider } from "@/i18n/i18n-provider";
 
 /**
  * Top-level client providers for the app.
@@ -34,7 +35,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider delay={250}>{children}</TooltipProvider>
+        <I18nProvider>
+          <TooltipProvider delay={250}>{children}</TooltipProvider>
+        </I18nProvider>
       </QueryClientProvider>
     </NextThemesProvider>
   );

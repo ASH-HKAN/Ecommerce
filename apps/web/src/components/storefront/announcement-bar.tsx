@@ -4,10 +4,12 @@ import * as React from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 import { ANNOUNCEMENT } from "@/data/mocks";
+import { useI18n } from "@/i18n/i18n-provider";
 
 const STORAGE_KEY = "auto-tools.announcement.dismissed";
 
 export function AnnouncementBar() {
+  const { t } = useI18n();
   const [hidden, setHidden] = React.useState(true);
 
   React.useEffect(() => {
@@ -23,8 +25,9 @@ export function AnnouncementBar() {
         <Link
           href={ANNOUNCEMENT.href}
           className="flex-1 truncate text-center font-medium tracking-wide hover:underline"
+          suppressHydrationWarning
         >
-          {ANNOUNCEMENT.text}
+          {t("announcement.freeShipping")}
         </Link>
         <button
           type="button"
