@@ -139,7 +139,7 @@ export const products: Product[] = [
     slug: "mechanic-tool-kit-200pc",
     name: "Mechanic Tool Kit, 200-piece",
     brand: b("stanley"),
-    category: c("kits"),
+    category: c("tool-kits"),
     price: 19900,
     compareAt: 24900,
     rating: { average: 4.5, count: 220 },
