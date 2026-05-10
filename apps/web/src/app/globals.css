@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Auto Tools E-Commerce Platform — Theme Tokens
+ * Aligned with UI_UX_DESIGN_SPEC.md sections 3 (Color), 4 (Typography), 5 (Layout).
+ * HSL values are used so we can compose them with Tailwind's color-opacity modifiers.
+ */
+
+@layer base {
+  :root {
+    /* Surfaces — light mode */
+    --background: 210 40% 98%;        /* brand.steel.50  #F8FAFC */
+    --foreground: 222 47% 11%;        /* brand.steel.900 #0F172A */
+
+    --card: 0 0% 100%;                /* white surface.raised */
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary action — brand orange #F97316 */
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary action — charcoal */
+    --secondary: 222 47% 11%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted text and surfaces — steel.500 / steel.100 */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: 222 47% 11%;
+
+    /* Status — destructive (red) */
+    --destructive: 0 73% 49%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Status — success (emerald 500) */
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
+
+    /* Status — warning (amber 500) */
+    --warning: 38 92% 50%;
+    --warning-foreground: 26 71% 15%;
+
+    /* Status — info (blue 600) */
+    --info: 221 83% 49%;
+    --info-foreground: 0 0% 100%;
+
+    /* Borders + focus */
+    --border: 214 32% 91%;            /* brand.steel.200 */
+    --input: 214 32% 91%;
+    --ring: 24 95% 53%;               /* orange focus ring */
+
+    /* Radius (Section 5.5 — radius.md = 8px) */
+    --radius: 8px;
+  }
+
+  .dark {
+    --background: 222 47% 7%;         /* brand.steel.950 #0B0F19 */
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;              /* brand.steel.900 #0F172A */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 24 95% 53%;
+    --primary-foreground: 222 47% 7%; /* dark text on orange in dark mode */
+
+    --secondary: 0 0% 100%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 217 33% 17%;             /* brand.steel.800 */
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 160 84% 45%;
+    --success-foreground: 222 47% 7%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 26 71% 15%;
+
+    --info: 221 83% 60%;
+    --info-foreground: 222 47% 7%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 22%;
+    --ring: 24 95% 53%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "ss01", "cv11", "tnum";
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+  /* Tabular numbers everywhere a price, timer, or SKU appears */
+  .tabular-nums,
+  .price,
+  .sku,
+  .timer {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .focus-ring {
+    @apply outline-none ring-3 ring-offset-2 ring-offset-background ring-[hsl(var(--ring))];
+  }
+  /* Reduced-motion utility shortcut */
+  @media (prefers-reduced-motion: reduce) {
+    .motion-safe-only {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
